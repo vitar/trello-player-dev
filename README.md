@@ -22,12 +22,13 @@ The files in this repository are static and can be hosted on any static hosting 
 ## Usage
 - The popup displays all `.m4a` and `.mp3` attachments from cards in the list.
 - Use **Previous** and **Next** to navigate the playlist while the audio player plays each attachment.
-- Click the wrench next to the waveform area to create or update the waveform:
+- Click the wrench next to the waveform area to create the waveform:
   1. Download the file.
   2. Load the downloaded file into the modal.
   3. Save the waveform back to Trello storage.
 
-The Power-Up has been briefly tested in desktop and mobile Chrome.  Trello mobile apps do not support custom Power-Ups.
+The Power-Up has been briefly tested in desktop and mobile Chrome.
+_Trello mobile apps do not support custom Power-Ups._
 
 ## Known issues
 - This Power-Up does not conform to Trello requirements and is not publicly listed, but it can be self-hosted and enabled in your workspace.
