@@ -13,6 +13,7 @@ let cancelBtn = document.getElementById('cancel-waveform');
 let waveformPreview = document.getElementById('waveform-preview');
 let wavesurfer;
 let currentAttachment;
+let waveformDuration;
 
 async function loadPlayer() {
   try {
@@ -95,7 +96,8 @@ function showWaveform(att) {
   t.get(att.cardId, 'shared', 'waveformData').then(data => {
     if (data) {
       const ws = WaveSurfer.create({container: waveformView, interact:false, height:80});
-      ws.loadPeaks(JSON.parse(data), att.url);
+      const wfData = JSON.parse(data);
+      ws.load('', wfData.peaks, wfData.duration);
     } else {
       const msg = document.createElement('span');
       msg.textContent = 'Waveform is unavailable. Create waveform ';
@@ -126,6 +128,7 @@ fileInput.addEventListener('change', async () => {
   const url = URL.createObjectURL(fileInput.files[0]);
   wavesurfer.once('ready', () => {
     saveBtn.disabled = false;
+    waveformDuration = wavesurfer.getDuration();
   });
   await wavesurfer.load(url);
 });
@@ -133,7 +136,8 @@ fileInput.addEventListener('change', async () => {
 cancelBtn.addEventListener('click', closeModal);
 saveBtn.addEventListener('click', async () => {
   const peaks = wavesurfer.exportPeaks({channels:1,maxLength:600,precision:1000});
-  await t.set(currentAttachment.cardId, 'shared', 'waveformData', JSON.stringify(peaks));
+  const waveformData = {peaks, duration: waveformDuration};
+  await t.set(currentAttachment.cardId, 'shared', 'waveformData', JSON.stringify(waveformData));
   closeModal();
   showWaveform(currentAttachment);
 });
