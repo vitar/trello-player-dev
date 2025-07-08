@@ -29,14 +29,6 @@ async function loadPlayer() {
         const textSpan = document.createElement('span');
         textSpan.textContent = attachment.name;
         attachmentLi.appendChild(textSpan);
-        const wrench = document.createElement('span');
-        wrench.textContent = '\uD83D\uDD27';
-        wrench.className = 'wrench';
-        wrench.addEventListener('click', (e) => {
-          e.stopPropagation();
-          openWaveformModal(attachment);
-        });
-        attachmentLi.appendChild(wrench);
         attachmentLi.addEventListener('click', () => {
           loadAttachment(m4aAttachments.findIndex((att) => att.id == attachment.id));
         });
@@ -116,6 +108,7 @@ function showWaveform(att) {
 function openWaveformModal(att) {
   currentAttachment = att;
   downloadLink.href = att.url;
+  downloadLink.download = att.name;
   wavesurfer && wavesurfer.destroy();
   waveformPreview.innerHTML = '';
   wavesurfer = WaveSurfer.create({container: waveformPreview, height:80});
