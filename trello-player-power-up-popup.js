@@ -42,7 +42,7 @@ async function loadPlayer() {
         attachmentsList.appendChild(attachmentLi);
       });
     });
-    
+
     if (m4aAttachments.length > 0) {
       loadAttachment(0);
     }
@@ -61,7 +61,7 @@ function loadAttachment(index) {
     if (playPromise !== undefined) {
       playPromise.then(_ => {}).catch(error => {});
     }
-    
+
     const attachmentsListItems = document.querySelectorAll('#attachments-list li');
     attachmentsListItems.forEach((item, idx) => {
       item.classList.toggle('active', idx === index);
