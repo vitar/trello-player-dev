@@ -95,7 +95,13 @@ function showWaveform(att) {
 
   t.get(att.cardId, 'shared', 'waveformData').then(data => {
     if (data) {
-      const ws = WaveSurfer.create({container: waveformView, interact:false, height:80});
+      const ws = WaveSurfer.create({
+        container: waveformView,
+        interact: true,
+        normalize: true,
+        height:80,
+        media: audioPlayer
+      });
       const wfData = JSON.parse(data);
       ws.load('', wfData.peaks, wfData.duration);
     } else {
