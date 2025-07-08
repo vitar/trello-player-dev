@@ -15,7 +15,7 @@ async function loadPlayer() {
         m4aAttachments.push(attachment);
         
         const attachmentLi = document.createElement('li');
-        attachmentLi.innerHTML = attachment.name;
+        attachmentLi.textContent = attachment.name;
         attachmentLi.addEventListener('click', () => {
           loadAttachment(m4aAttachments.findIndex((att) => att.name == attachment.name));
         });
