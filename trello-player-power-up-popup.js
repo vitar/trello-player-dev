@@ -124,10 +124,10 @@ loadFileLink.addEventListener('click', (e) => {
 fileInput.addEventListener('change', async () => {
   if (fileInput.files.length === 0) return;
   const url = URL.createObjectURL(fileInput.files[0]);
-  await wavesurfer.load(url);
   wavesurfer.once('ready', () => {
     saveBtn.disabled = false;
   });
+  await wavesurfer.load(url);
 });
 
 cancelBtn.addEventListener('click', closeModal);
