@@ -4,6 +4,8 @@ let m4aAttachments = [];
 let audioPlayer = document.getElementById('audio-player');
 let attachmentsList = document.getElementById('attachments-list');
 let waveformView = document.getElementById('waveform-view');
+let waveformTemplate = document.getElementById('waveform-template');
+let attachmentTemplate = document.getElementById('attachment-template');
 let modal = document.getElementById('waveform-modal');
 let downloadLink = document.getElementById('download-file');
 let loadFileLink = document.getElementById('load-file');
@@ -25,14 +27,12 @@ async function loadPlayer() {
       cardM4aAttachments.forEach(attachment => {
         m4aAttachments.push(Object.assign({cardId: card.id}, attachment));
 
-        const attachmentLi = document.createElement('li');
-        const textSpan = document.createElement('span');
-        textSpan.textContent = attachment.name;
-        attachmentLi.appendChild(textSpan);
-        attachmentLi.addEventListener('click', () => {
+        const li = attachmentTemplate.content.firstElementChild.cloneNode(true);
+        li.querySelector('.attachment-name').textContent = attachment.name;
+        li.addEventListener('click', () => {
           loadAttachment(m4aAttachments.findIndex((att) => att.id == attachment.id));
         });
-        attachmentsList.appendChild(attachmentLi);
+        attachmentsList.appendChild(li);
       });
     });
 
@@ -80,17 +80,20 @@ document.getElementById('next-button').addEventListener('click', () => {
 
 function showWaveform(att) {
   waveformView.innerHTML = '';
-  const wrench = document.createElement('span');
-  wrench.textContent = '\uD83D\uDD27';
-  wrench.className = 'wrench';
+  const frag = waveformTemplate.content.cloneNode(true);
+  const msg = frag.querySelector('.no-waveform-msg');
+  const wrench = frag.querySelector('.wrench');
+  const canvas = frag.querySelector('.waveform-canvas');
   wrench.addEventListener('click', () => openWaveformModal(att));
+
+  waveformView.appendChild(frag);
 
   t.get(att.cardId, 'shared', 'waveformData').then(data => {
     if (data) {
+      msg.remove();
       wrench.classList.add('floating');
-      waveformView.appendChild(wrench);
       const ws = WaveSurfer.create({
-        container: waveformView,
+        container: canvas,
         interact: true,
         normalize: true,
         height:80,
@@ -98,11 +101,6 @@ function showWaveform(att) {
       });
       const wfData = JSON.parse(data);
       ws.load('', wfData.peaks, wfData.duration);
-    } else {
-      const msg = document.createElement('span');
-      msg.textContent = 'Waveform is unavailable. Create waveform ';
-      waveformView.appendChild(msg);
-      waveformView.appendChild(wrench);
     }
   });
 }

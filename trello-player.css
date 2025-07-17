@@ -81,6 +81,14 @@ audio {
   position: relative;
 }
 
+.waveform-canvas {
+  width: 100%;
+}
+
+.no-waveform-msg {
+  margin-right: 5px;
+}
+
 .wrench {
   margin-left: 5px;
   cursor: pointer;
