@@ -6,6 +6,7 @@ let attachmentsList = document.getElementById('attachments-list');
 let waveformView = document.getElementById('waveform-view');
 let waveformTemplate = document.getElementById('waveform-template');
 let attachmentTemplate = document.getElementById('attachment-template');
+let waveformPreviewTemplate = document.getElementById('waveform-preview-template');
 let modal = document.getElementById('waveform-modal');
 let downloadLink = document.getElementById('download-file');
 let loadFileLink = document.getElementById('load-file');
@@ -14,20 +15,20 @@ let saveBtn = document.getElementById('save-waveform');
 let cancelBtn = document.getElementById('cancel-waveform');
 let waveformPreview = document.getElementById('waveform-preview');
 let deleteWaveform = false;
-let deleteBtn;
 class WaveformPreview extends HTMLElement {
   constructor() {
     super();
+    const frag = waveformPreviewTemplate.content.cloneNode(true);
+    this.appendChild(frag);
+    this.canvas = this.querySelector('.waveform-canvas');
+    this.deleteBtn = this.querySelector('.delete-waveform');
   }
   createPlayer() {
     if (this.wavesurfer) {
       this.wavesurfer.destroy();
-      this.innerHTML = '';
     }
-    const container = document.createElement('div');
-    container.className = 'waveform-canvas';
-    this.appendChild(container);
-    this.wavesurfer = WaveSurfer.create({container, height:80});
+    this.canvas.innerHTML = '';
+    this.wavesurfer = WaveSurfer.create({container: this.canvas, height:80});
     return this.wavesurfer;
   }
   loadFromData(peaks, duration) {
@@ -46,8 +47,11 @@ class WaveformPreview extends HTMLElement {
       this.wavesurfer.destroy();
       this.wavesurfer = null;
     }
-    this.innerHTML = '';
+    this.canvas.innerHTML = '';
+    this.hideDeleteButton();
   }
+  showDeleteButton() { this.deleteBtn.classList.remove('hidden'); }
+  hideDeleteButton() { this.deleteBtn.classList.add('hidden'); }
   exportPeaks() {
     return this.wavesurfer.exportPeaks({channels:1,maxLength:600,precision:1000});
   }
@@ -153,24 +157,21 @@ function openWaveformModal(att) {
   downloadLink.download = att.name;
   waveformPreview.clear();
   deleteWaveform = false;
-  deleteBtn && deleteBtn.remove();
   saveBtn.disabled = true;
   modal.classList.remove('hidden');
   modal.focus();
+  waveformPreview.deleteBtn.onclick = () => {
+    deleteWaveform = true;
+    saveBtn.disabled = false;
+    waveformPreview.clear();
+  };
   t.get(att.cardId, 'shared', 'waveformData').then(data => {
     if (data) {
       const wfData = JSON.parse(data);
       waveformPreview.loadFromData(wfData.peaks, wfData.duration);
-      deleteBtn = document.createElement('span');
-      deleteBtn.textContent = '🅇';
-      deleteBtn.className = 'delete-waveform';
-      deleteBtn.addEventListener('click', () => {
-        deleteWaveform = true;
-        saveBtn.disabled = false;
-        waveformPreview.clear();
-        deleteBtn.remove();
-      });
-      waveformPreview.appendChild(deleteBtn);
+      waveformPreview.showDeleteButton();
+    } else {
+      waveformPreview.hideDeleteButton();
     }
   });
 }
@@ -186,7 +187,7 @@ fileInput.addEventListener('change', async () => {
   await waveformPreview.loadFromUrl(url);
   saveBtn.disabled = false;
   deleteWaveform = false;
-  deleteBtn && deleteBtn.remove();
+  waveformPreview.hideDeleteButton();
   waveformDuration = waveformPreview.getDuration();
 });
 
@@ -208,7 +209,6 @@ function closeModal() {
   waveformPreview.clear();
   fileInput.value = '';
   deleteWaveform = false;
-  deleteBtn && deleteBtn.remove();
 }
 
 modal.addEventListener('keydown', (e) => {
