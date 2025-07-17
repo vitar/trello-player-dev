@@ -139,21 +139,19 @@ document.getElementById('next-button').addEventListener('click', () => {
 });
 
 function showWaveform(att) {
-  waveformView.innerHTML = '';
-  const wf = document.createElement('waveform-preview');
   waveformView.appendChild(wf);
-  wf.showWrench();
-  wf.setWrenchHandler(() => openWaveformModal(att));
+  waveformView.clear();
+  waveformView.showWrench();
+  waveformView.setWrenchHandler(() => openWaveformModal(att));
   t.get(att.cardId, 'shared', 'waveformData').then(data => {
     if (data) {
-      wf.hideMessage();
       const wfData = JSON.parse(data);
-      wf.loadFromData(wfData.peaks, wfData.duration, {
+      waveformView.loadFromData(wfData.peaks, wfData.duration, {
         interact: true,
         media: audioPlayer
       });
     } else {
-      wf.showMessage();
+      waveformView.showMessage();
     }
   });
 }
@@ -163,8 +161,6 @@ function openWaveformModal(att) {
   downloadLink.href = att.url;
   downloadLink.download = att.name;
   waveformPreview.clear();
-  waveformPreview.hideMessage();
-  waveformPreview.hideWrench();
   deleteWaveform = false;
   saveBtn.disabled = true;
   modal.classList.remove('hidden');

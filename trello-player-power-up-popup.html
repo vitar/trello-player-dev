@@ -7,7 +7,7 @@
   </head>
   <body>
     <div id="attachments-container">
-      <div id="waveform-view"></div>
+      <waveform-preview id="waveform-view"></waveform-preview>
       <audio id="audio-player" controls></audio>
       <div class="controls">
         <button id="prev-button">Previous</button>
@@ -17,8 +17,8 @@
     </div>
 
     <template id="waveform-template">
-      <span class="no-waveform-msg">Waveform is unavailable.<br />Click on 🔧 to create waveform.</span>
-      <span class="wrench">🔧</span>
+      <span class="no-waveform-msg hidden">Waveform is unavailable.<br />Click on 🔧 to create waveform.</span>
+      <span class="wrench hidden">🔧</span>
       <span class="delete-waveform hidden">🅇</span>
       <div class="waveform-canvas"></div>
     </template>
