@@ -139,7 +139,6 @@ document.getElementById('next-button').addEventListener('click', () => {
 });
 
 function showWaveform(att) {
-  waveformView.appendChild(wf);
   waveformView.clear();
   waveformView.showWrench();
   waveformView.setWrenchHandler(() => openWaveformModal(att));
