@@ -16,6 +16,16 @@
       <ul id="attachments-list" class="attachments"></ul>
     </div>
 
+    <template id="waveform-template">
+      <span class="no-waveform-msg">Waveform is unavailable. Create waveform </span>
+      <span class="wrench">&#128295;</span>
+      <div class="waveform-canvas"></div>
+    </template>
+
+    <template id="attachment-template">
+      <li><span class="attachment-name"></span></li>
+    </template>
+
     <div id="waveform-modal" class="hidden" tabindex="0">
       <div class="modal-content">
         <p><a id="download-file" href="" download>Step 1: download file</a></p>
