@@ -57,8 +57,8 @@ class WaveformPreview extends HTMLElement {
     this.hideMessage();
     this.hideWrench();
   }
-  showDeleteButton() { this.deleteBtn.classList.remove('hidden'); }
-  hideDeleteButton() { this.deleteBtn.classList.add('hidden'); }
+  showDeleteButton() { if (this.deleteBtn) this.deleteBtn.classList.remove('hidden'); }
+  hideDeleteButton() { if (this.deleteBtn) this.deleteBtn.classList.add('hidden'); }
   showMessage() { if (this.msg) this.msg.classList.remove('hidden'); }
   hideMessage() { if (this.msg) this.msg.classList.add('hidden'); }
   showWrench() { if (this.wrench) this.wrench.classList.remove('hidden'); }
@@ -142,11 +142,11 @@ function showWaveform(att) {
   waveformView.innerHTML = '';
   const wf = document.createElement('waveform-preview');
   waveformView.appendChild(wf);
+  wf.showWrench();
   wf.setWrenchHandler(() => openWaveformModal(att));
   t.get(att.cardId, 'shared', 'waveformData').then(data => {
     if (data) {
       wf.hideMessage();
-      wf.wrench.classList.add('floating');
       const wfData = JSON.parse(data);
       wf.loadFromData(wfData.peaks, wfData.duration, {
         interact: true,
@@ -154,7 +154,6 @@ function showWaveform(att) {
       });
     } else {
       wf.showMessage();
-      wf.wrench.classList.remove('floating');
     }
   });
 }
