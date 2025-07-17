@@ -39,6 +39,13 @@ The project is released under the [Unlicense](LICENSE).  Security issues can be 
 ## Development
 The project is being developed and maintained using OpenAI Codex with minimal manual intervention.
 
+There're two repositories used for development and production purposes, each repository is hosted on separate GitHub Pages:
+* https://github.com/vitar/trello-player-dev/ - for development (experimenting and testing).
+* https://github.com/vitar/trello-player/ - for production.
+
+When new features are developed, development repo code will be manually copied to production repo.
+For fork purposes, use https://github.com/vitar/trello-player/ repository.
+
 ## Test automation
 The `test` folder contains a small Node.js script that loads
 `trello-player-power-up-popup.html` in a mock Trello environment using
