@@ -1,8 +1,10 @@
 # Audio Player Power-Up for Trello
 
-Audio Player Power-Up is a custom Trello Power-Up that plays audio attachments on a board list.  Attachments ending in `.m4a` or `.mp3` are grouped into a playlist.  The Power-Up can also store a waveform for each attachment in Trello card storage so that the waveform can be displayed later.
+Audio Player Power-Up is a custom Trello Power-Up that plays audio attachments on a board list. Attachments ending in `.m4a` or `.mp3` are grouped into a playlist.  The Power-Up can also store a waveform for each attachment in Trello card storage so that the waveform can be displayed later.
 
-The files in this repository are static and can be hosted on any static hosting provider.  GitHub Pages works well&mdash;fork this repository and enable Pages to serve the files.
+<img src="trello-player-screenshot.png" width="600">
+
+The files in this repository are static and can be hosted on any static hosting provider.  GitHub Pages works well &mdash; fork https://github.com/vitar/trello-player/ repository and enable Pages to serve the files.
 
 ## Enabling the Power-Up in Trello
 1. Open the [Trello Power-Up admin page](https://trello.com/power-ups/admin) and choose **New**.
