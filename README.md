@@ -35,3 +35,16 @@ _Trello mobile apps do not support custom Power-Ups._
 
 ## License
 The project is released under the [Unlicense](LICENSE).  Security issues can be reported by opening an issue in this repository as described in [SECURITY.md](SECURITY.md).
+
+## Test automation
+The `test` folder contains a small Node.js script that loads
+`trello-player-power-up-popup.html` in a mock Trello environment using
+[jsdom](https://github.com/jsdom/jsdom). The test reads the HTML from disk so it
+always matches the current popup structure. Run `npm install` to fetch the test
+dependency and then run `npm test` to execute `test/power-up-loading-test.js`,
+which verifies that the Power-Up can load attachments when the Trello API is
+mocked.
+
+GitHub Actions can run this test automatically.  A workflow file is provided in
+`.github/workflows/test.yml` that installs dependencies and runs `npm test` on
+every push or pull request targeting `main`.
