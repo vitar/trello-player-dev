@@ -125,3 +125,16 @@ audio {
   margin-top: 10px;
   text-align: right;
 }
+
+waveform-preview {
+  display: block;
+  position: relative;
+}
+
+waveform-preview .delete-waveform {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  z-index: 10;
+}
