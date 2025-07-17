@@ -220,6 +220,15 @@ modal.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !saveBtn.disabled) { saveBtn.click(); }
 });
 
+function outsideClickClose(e) {
+  if (e.target === modal) {
+    closeModal();
+  }
+}
+
+modal.addEventListener('click', outsideClickClose);
+modal.addEventListener('touchstart', outsideClickClose);
+
 audioPlayer.addEventListener('ended', () => {
   if (currentAttachmentIndex < m4aAttachments.length - 1) {
     loadAttachment(currentAttachmentIndex + 1);
