@@ -36,6 +36,9 @@ _Trello mobile apps do not support custom Power-Ups._
 ## License
 The project is released under the [Unlicense](LICENSE).  Security issues can be reported by opening an issue in this repository as described in [SECURITY.md](SECURITY.md).
 
+## Development
+The project is being developed and maintained using OpenAI Codex with minimal manual intervention.
+
 ## Test automation
 The `test` folder contains a small Node.js script that loads
 `trello-player-power-up-popup.html` in a mock Trello environment using
