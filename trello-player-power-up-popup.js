@@ -145,8 +145,9 @@ document.getElementById('pause-button').addEventListener('click', () => {
   audioPlayer.pause();
 });
 
-document.getElementById('pause-button').addEventListener('click', () => {
-  audioPlayer.stop();
+document.getElementById('stop-button').addEventListener('click', () => {
+  audioPlayer.pause();
+  audio.currentTime = 0;
 });
 
 function showWaveform(att) {
