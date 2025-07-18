@@ -131,11 +131,22 @@ document.getElementById('prev-button').addEventListener('click', () => {
   }
 });
 
-
 document.getElementById('next-button').addEventListener('click', () => {
   if (currentAttachmentIndex < m4aAttachments.length - 1) {
     loadAttachment(currentAttachmentIndex + 1);
   }
+});
+
+document.getElementById('play-button').addEventListener('click', () => {
+  audioPlayer.play();
+});
+
+document.getElementById('pause-button').addEventListener('click', () => {
+  audioPlayer.pause();
+});
+
+document.getElementById('pause-button').addEventListener('click', () => {
+  audioPlayer.stop();
 });
 
 function showWaveform(att) {
