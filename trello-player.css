@@ -76,8 +76,8 @@ audio {
   background-color: var(--btn-bg);
   border: 2px solid var(--btn-color);
   border-radius: 50%;
-  width: 3em;
-  height: 3em;
+  width: 2em;
+  height: 2em;
   text-align: center;
   line-height: 1;
   cursor: pointer;
