@@ -40,6 +40,7 @@ class WaveformPreview extends HTMLElement {
   loadFromData(peaks, duration, options = {}) {
     const ws = this.createPlayer(options);
     ws.load('', peaks, duration);
+    ws.setMediaElement(audioPlayer);
   }
   async loadFromUrl(url, options = {}) {
     const ws = this.createPlayer(options);
@@ -159,14 +160,13 @@ function showWaveform(att) {
     if (data) {
       const wfData = JSON.parse(data);
       waveformView.loadFromData(wfData.peaks, wfData.duration, {
-        interact: true,
-        media: audioPlayer
+        normalize: true,
+        interact: true
       });
     } else {
       waveformView.loadFromData(dummyPeaks, audioPlayer.duration, {
         normalize: false,
-        interact: true,
-        media: audioPlayer
+        interact: true
       });
       waveformView.showMessage();
     }
