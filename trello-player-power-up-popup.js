@@ -14,6 +14,8 @@ let saveBtn = document.getElementById('save-waveform');
 let cancelBtn = document.getElementById('cancel-waveform');
 let waveformPreview = document.getElementById('waveform-preview');
 let deleteWaveform = false;
+const dummyPeaksPattern = [0.1, 0.5, 1.0, 0.5];
+const dummyPeaks = Array.from({ length: 100 }, (_, i) => dummyPeaksPattern[i % dummyPeaksPattern.length]);
 class WaveformPreview extends HTMLElement {
   constructor() {
     super();
@@ -162,6 +164,10 @@ function showWaveform(att) {
         media: audioPlayer
       });
     } else {
+      waveformView.loadFromData(dummyPeaks, audioPlayer.duration, {
+        interact: true,
+        media: audioPlayer
+      });
       waveformView.showMessage();
     }
   });
