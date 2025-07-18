@@ -22,6 +22,7 @@ window.WaveSurfer = { create: () => ({
   destroy: () => {},
   exportPeaks: () => [],
   getDuration: () => 0,
+  setMediaElement: () => {},
 }) };
 
 global.window = window;
