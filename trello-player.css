@@ -83,12 +83,15 @@ audio {
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, transform 0.1s;
 }
-.circle-btn:hover {
-  background-color: var(--btn-hover-bg);
-  color: var(--btn-hover-text);
+@media (hover: hover) and (pointer: fine) {
+  .circle-btn:hover {
+    background-color: var(--btn-hover-bg);
+    color: var(--btn-hover-text);
+  }
 }
 .circle-btn:active {
   transform: scale(0.95);
+  filter: brightness(0.8);
 }
 .controls {
   margin-top: 10px;
