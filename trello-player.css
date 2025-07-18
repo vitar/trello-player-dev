@@ -132,9 +132,9 @@ audio {
 }
 #waveform-view .no-waveform-msg.floating {
   position: absolute;
-  top: 20;
-  left: 20;
-  margin: 10;
+  top: 0;
+  left: 0;
+  margin: 0;
   z-index: 10;
 }
 .wrench {
