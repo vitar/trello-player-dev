@@ -24,6 +24,12 @@ window.WaveSurfer = { create: () => ({
   getDuration: () => 0,
   setMediaElement: () => {},
 }) };
+window.fetch = async () => ({
+  json: async () => ([{
+    id: 'c1',
+    attachments: [{ id: 'a1', name: 'sample.mp3', url: 'http://example.com/sample.mp3' }]
+  }])
+});
 
 global.window = window;
 global.document = window.document;
@@ -33,6 +39,7 @@ const scriptContent = fs.readFileSync(path.join(__dirname, '../trello-player-pow
 vm.runInContext(scriptContent, dom.getInternalVMContext());
 
 window.dispatchEvent(new window.Event('load'));
+window.document.getElementById('authorize-button').click();
 // allow pending promises in the script to resolve
 await new Promise(r => setTimeout(r, 0));
 
