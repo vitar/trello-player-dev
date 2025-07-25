@@ -182,3 +182,21 @@ waveform-preview .delete-waveform {
   cursor: pointer;
   z-index: 10;
 }
+
+#authorize-button {
+  margin: 20px auto;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  color: var(--btn-color);
+  background-color: var(--btn-bg);
+  border: 2px solid var(--btn-color);
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  display: block;
+}
+@media (hover: hover) and (pointer: fine) {
+  #authorize-button:hover {
+    background-color: var(--btn-hover-bg);
+    color: var(--btn-hover-text);
+  }
+}

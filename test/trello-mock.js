@@ -8,6 +8,8 @@ function createMockTrello() {
         ]
       }]
     }),
+    authorize: async () => {},
+    getRestApi: () => ({ getToken: async () => 'mock-token' }),
     get: async () => null,
     set: async () => {},
     remove: async () => {}

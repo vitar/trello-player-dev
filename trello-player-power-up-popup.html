@@ -3,10 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>Audio Player for Trello Power-Up Popup</title>
-    <link rel="stylesheet" href="./trello-player.css?12">
+    <link rel="stylesheet" href="./trello-player.css?13">
   </head>
   <body>
-    <div id="attachments-container">
+    <button id="authorize-button">Authorize Trello</button>
+    <div id="attachments-container" class="hidden">
       <waveform-preview id="waveform-view"></waveform-preview>
       <div class="player-controls">
         <button class="circle-btn" id="prev-button" title="Previous">&#x23EE;&#xFE0E;</button> <!-- ⏮ &#x23EE; -->
@@ -45,6 +46,6 @@
 
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
-    <script src="./trello-player-power-up-popup.js?22"></script>
+    <script src="./trello-player-power-up-popup.js?23"></script>
   </body>
 </html>

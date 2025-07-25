@@ -14,6 +14,9 @@ let saveBtn = document.getElementById('save-waveform');
 let cancelBtn = document.getElementById('cancel-waveform');
 let waveformPreview = document.getElementById('waveform-preview');
 let deleteWaveform = false;
+let authorizeBtn = document.getElementById('authorize-button');
+let attachmentsContainer = document.getElementById('attachments-container');
+let trelloToken;
 const dummyPeaks = Array(100).fill(0.3);
 class WaveformPreview extends HTMLElement {
   constructor() {
@@ -82,11 +85,13 @@ customElements.define('waveform-preview', WaveformPreview);
 let currentAttachment;
 let waveformDuration;
 
-async function loadPlayer() {
+async function loadPlayer(token) {
   try {
     m4aAttachments = [];
-    const listInfo = await t.list('cards');
-    const cards = listInfo.cards;
+    attachmentsList.innerHTML = '';
+    const listInfo = await t.list('id');
+    const response = await fetch(`https://api.trello.com/1/lists/${listInfo.id}/cards?attachments=true&token=${token}`);
+    const cards = await response.json();
     cards.forEach(card => {
       const cardM4aAttachments = card.attachments.filter(attachment => attachment.url.endsWith('.m4a') || attachment.url.endsWith('.mp3'));
       cardM4aAttachments.forEach(attachment => {
@@ -258,4 +263,15 @@ audioPlayer.addEventListener('ended', () => {
   }
 });
 
-window.addEventListener('load', loadPlayer);
+authorizeBtn.addEventListener('click', async () => {
+  try {
+    await t.authorize({ type: 'popup', name: 'Audio Player Power-Up' });
+    trelloToken = await t.getRestApi().getToken();
+    authorizeBtn.classList.add('hidden');
+    attachmentsContainer.classList.remove('hidden');
+    await loadPlayer(trelloToken);
+  } catch (err) {
+    console.error('Authorization failed', err);
+    alert('Authorization failed');
+  }
+});
