@@ -15,6 +15,16 @@ html = html.replace(/<script[^>]*><\/script>/g, '').replace(/<script[^>]*src="[^
 const dom = new JSDOM(html, { url: 'http://localhost', runScripts: 'outside-only' });
 const { window } = dom;
 installTrelloMock(window);
+const tMock = window.TrelloPowerUp.iframe();
+window.TrelloPowerUp.iframe = () => tMock;
+tMock.get = async (scope, vis, key) => {
+  if (scope === 'board' && key === 'apikey') return 'mock-key';
+  if (scope === 'member' && key === 'token') return 'mock-token';
+  return null;
+};
+tMock.set = async () => {};
+tMock.remove = async () => {};
+
 window.HTMLMediaElement.prototype.play = () => Promise.resolve();
 window.WaveSurfer = { create: () => ({
   load: () => {},
@@ -24,12 +34,15 @@ window.WaveSurfer = { create: () => ({
   getDuration: () => 0,
   setMediaElement: () => {},
 }) };
-window.fetch = async () => ({
-  json: async () => ([{
+window.fetch = async (url) => {
+  if (url.includes('members/me')) {
+    return { status: 200, json: async () => ({ id: 'me' }) };
+  }
+  return { status: 200, json: async () => ([{
     id: 'c1',
     attachments: [{ id: 'a1', name: 'sample.mp3', url: 'http://example.com/sample.mp3' }]
-  }])
-});
+  }]) };
+};
 
 global.window = window;
 global.document = window.document;
@@ -38,9 +51,6 @@ delete global.navigator; // jsdom sets navigator; ensure we use window.navigator
 const scriptContent = fs.readFileSync(path.join(__dirname, '../trello-player-power-up-popup.js'), 'utf8');
 vm.runInContext(scriptContent, dom.getInternalVMContext());
 
-window.dispatchEvent(new window.Event('load'));
-window.document.getElementById('authorize-button').click();
-// allow pending promises in the script to resolve
 await new Promise(r => setTimeout(r, 0));
 
 const items = window.document.querySelectorAll('#attachments-list li');

@@ -200,3 +200,12 @@ waveform-preview .delete-waveform {
     color: var(--btn-hover-text);
   }
 }
+
+#auth-form {
+  margin: 20px;
+  text-align: center;
+}
+#auth-form input {
+  padding: 0.5em;
+  margin-right: 0.5em;
+}
