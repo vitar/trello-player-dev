@@ -288,12 +288,18 @@ audioPlayer.addEventListener('ended', () => {
 authorizeBtn.addEventListener('click', async () => {
   const key = apiKeyInput.value.trim();
   await t.set('board', 'private', 'apikey', key);
-  t.authorize({
-    callback_method: 'fragment',
-    return_url: window.location.href.split('#')[0],
-    scope: 'read',
-    expiration: 'never'
-  });
+  const returnUrl = window.location.href.split('#')[0];
+  const authUrl =
+    'https://trello.com/1/authorize?expiration=never' +
+    '&scope=read&key=' + encodeURIComponent(key) +
+    '&callback_method=fragment' +
+    '&return_url=' + encodeURIComponent(returnUrl);
+
+  t.authorize(authUrl, {
+    height: 680,
+    width: 500,
+    persist: true
+  }).then(() => t.closePopup());
 });
 
 apiKeyInput.addEventListener('change', () => {
