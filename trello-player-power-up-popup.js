@@ -16,8 +16,30 @@ let waveformPreview = document.getElementById('waveform-preview');
 let deleteWaveform = false;
 let authorizeBtn = document.getElementById('authorize-button');
 let attachmentsContainer = document.getElementById('attachments-container');
+let authForm = document.getElementById('auth-form');
+let apiKeyInput = document.getElementById('apikey-input');
 let trelloToken;
 const dummyPeaks = Array(100).fill(0.3);
+
+function showAuthForm() {
+  authForm.classList.remove('hidden');
+  attachmentsContainer.classList.add('hidden');
+}
+
+function hideAuthForm() {
+  authForm.classList.add('hidden');
+  attachmentsContainer.classList.remove('hidden');
+}
+
+async function validateToken(key, token) {
+  if (!key || !token) return false;
+  try {
+    const resp = await fetch(`https://api.trello.com/1/members/me?key=${key}&token=${token}`);
+    return resp.status === 200;
+  } catch {
+    return false;
+  }
+}
 class WaveformPreview extends HTMLElement {
   constructor() {
     super();
@@ -85,12 +107,12 @@ customElements.define('waveform-preview', WaveformPreview);
 let currentAttachment;
 let waveformDuration;
 
-async function loadPlayer(token) {
+async function loadPlayer(token, key) {
   try {
     m4aAttachments = [];
     attachmentsList.innerHTML = '';
     const listInfo = await t.list('id');
-    const response = await fetch(`https://api.trello.com/1/lists/${listInfo.id}/cards?attachments=true&token=${token}`);
+    const response = await fetch(`https://api.trello.com/1/lists/${listInfo.id}/cards?attachments=true&key=${key}&token=${token}`);
     const cards = await response.json();
     cards.forEach(card => {
       const cardM4aAttachments = card.attachments.filter(attachment => attachment.url.endsWith('.m4a') || attachment.url.endsWith('.mp3'));
@@ -264,14 +286,39 @@ audioPlayer.addEventListener('ended', () => {
 });
 
 authorizeBtn.addEventListener('click', async () => {
-  try {
-    await t.authorize({ type: 'popup', name: 'Audio Player Power-Up' });
-    trelloToken = await t.getRestApi().getToken();
-    authorizeBtn.classList.add('hidden');
-    attachmentsContainer.classList.remove('hidden');
-    await loadPlayer(trelloToken);
-  } catch (err) {
-    console.error('Authorization failed', err);
-    alert('Authorization failed');
-  }
+  const key = apiKeyInput.value.trim();
+  await t.set('board', 'private', 'apikey', key);
+  t.authorize({
+    callback_method: 'fragment',
+    return_url: window.location.href.split('#')[0],
+    scope: 'read',
+    expiration: 'never'
+  });
 });
+
+apiKeyInput.addEventListener('change', () => {
+  t.set('board', 'private', 'apikey', apiKeyInput.value.trim());
+});
+
+async function init() {
+  const key = await t.get('board', 'private', 'apikey');
+  if (key) apiKeyInput.value = key;
+
+  const hashMatch = window.location.hash.match(/token=([^&]+)/);
+  if (hashMatch) {
+    await t.set('member', 'private', 'token', hashMatch[1]);
+    window.location.hash = '';
+  }
+
+  const token = await t.get('member', 'private', 'token');
+  if (token && await validateToken(apiKeyInput.value.trim(), token)) {
+    hideAuthForm();
+    trelloToken = token;
+    await loadPlayer(token, apiKeyInput.value.trim());
+  } else {
+    if (token) await t.set('member', 'private', 'token', null);
+    showAuthForm();
+  }
+}
+
+init();
