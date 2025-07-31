@@ -21,6 +21,16 @@ let apiKeyInput = document.getElementById('apikey-input');
 let trelloToken;
 const dummyPeaks = Array(100).fill(0.3);
 
+window.addEventListener('message', async (e) => {
+  if (e.origin !== window.location.origin) return;
+  if (e.data && e.data.token) {
+    await t.set('member', 'private', 'token', e.data.token);
+    trelloToken = e.data.token;
+    hideAuthForm();
+    await loadPlayer(e.data.token, apiKeyInput.value.trim());
+  }
+});
+
 function showAuthForm() {
   authForm.classList.remove('hidden');
   attachmentsContainer.classList.add('hidden');
@@ -292,7 +302,7 @@ authorizeBtn.addEventListener('click', async () => {
   const authUrl =
     'https://trello.com/1/authorize?expiration=never' +
     '&scope=read&key=' + encodeURIComponent(key) +
-    '&callback_method=fragment' +
+    '&callback_method=postMessage' +
     '&return_url=' + encodeURIComponent(returnUrl);
 
   t.authorize(authUrl, {
