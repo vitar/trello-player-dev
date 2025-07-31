@@ -294,11 +294,12 @@ authorizeBtn.addEventListener('click', async () => {
   const key = apiKeyInput.value.trim();
   await t.set('board', 'private', 'apikey', key);
   const returnUrl = window.location.href.split('#')[0];
-  const authUrl =
-    'https://trello.com/1/authorize?expiration=never' +
-    '&scope=read&key=' + encodeURIComponent(key) +
-    '&callback_method=postMessage' +
-    '&return_url=' + encodeURIComponent(returnUrl);
+  const authUrl = (secret) => {
+    return 'https://trello.com/1/authorize?expiration=never' +
+      '&scope=read&key=' + encodeURIComponent(key) +
+      '&callback_method=postMessage' +
+      '&return_url=' + encodeURIComponent(returnUrl);
+  }
 
   t.authorize(authUrl, {
     validToken: isValidToken,
