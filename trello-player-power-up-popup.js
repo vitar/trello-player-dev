@@ -19,17 +19,12 @@ let attachmentsContainer = document.getElementById('attachments-container');
 let authForm = document.getElementById('auth-form');
 let apiKeyInput = document.getElementById('apikey-input');
 let trelloToken;
+let popup;
 const dummyPeaks = Array(100).fill(0.3);
 
-window.addEventListener('message', async (e) => {
-  if (e.origin !== window.location.origin) return;
-  if (e.data && e.data.token) {
-    await t.set('member', 'private', 'token', e.data.token);
-    trelloToken = e.data.token;
-    hideAuthForm();
-    await loadPlayer(e.data.token, apiKeyInput.value.trim());
-  }
-});
+function isValidToken(token) {
+  return typeof token === 'string' && /^[a-f0-9]{64}$/i.test(token);
+}
 
 function showAuthForm() {
   authForm.classList.remove('hidden');
@@ -306,10 +301,16 @@ authorizeBtn.addEventListener('click', async () => {
     '&return_url=' + encodeURIComponent(returnUrl);
 
   t.authorize(authUrl, {
-    height: 680,
-    width: 500,
-    persist: true
-  }).then(() => t.closePopup());
+    validToken: isValidToken,
+    windowCallback: (win) => { popup = win; }
+  })
+    .then((token) => {
+      popup?.close();
+      return t.set('member', 'private', 'token', token);
+    })
+    .then(() => {
+      location.reload();
+    });
 });
 
 apiKeyInput.addEventListener('change', () => {
