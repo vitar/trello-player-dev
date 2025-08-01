@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>POC Request</title>
+    <link rel="stylesheet" href="./trello-player.css?14">
+  </head>
+  <body>
+    <form id="poc-form">
+      <label>URL <input id="url-input" type="text"></label>
+      <label>APIKEY <input id="apikey-input" type="text"></label>
+      <label>TOKEN <input id="token-input" type="text"></label>
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      const form = document.getElementById('poc-form');
+      const urlInput = document.getElementById('url-input');
+      const apikeyInput = document.getElementById('apikey-input');
+      const tokenInput = document.getElementById('token-input');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const URL = urlInput.value.trim();
+        const APIKEY = apikeyInput.value.trim();
+        const TOKEN = tokenInput.value.trim();
+        try {
+          const file = await fetch(URL, {
+            method: 'GET',
+            headers: {
+              Authorization: `OAuth oauth_consumer_key="${APIKEY}", oauth_token="${TOKEN}"`,
+            },
+          });
+          const buffer = await file.arrayBuffer();
+          console.log(buffer);
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    </script>
+  </body>
+</html>
