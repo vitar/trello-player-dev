@@ -15,7 +15,7 @@ export default {
     const origin = request.headers.get("Origin");
 
     if (!targetUrl) {
-      return new Response("Missing 'url' parameter", { status: 400 });
+      return new Response("Forbidden", { status: 403 });
     }
 
     if (!origin || !origin.endsWith(allowedOriginDomain)) {
